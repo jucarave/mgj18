@@ -1,9 +1,13 @@
 import Component from 'engine/Component';
 import Input from 'engine/Input';
+import SpriteMaterial from 'engine/materials/SpriteMaterial';
 
 type keys = 'RIGHT' | 'LEFT';
 
 class PlayerComponent extends Component {
+    private _material           : SpriteMaterial;
+
+
     public static readonly ComponentName           : string = "PlayerComponent";
 
     private _input = {
@@ -13,6 +17,8 @@ class PlayerComponent extends Component {
 
     constructor() {
         super(PlayerComponent.ComponentName);
+
+        this._material = <SpriteMaterial>this._entity.material;
     }
 
     private _handleKeyboard(keyCode: number, value: number): void {
@@ -33,6 +39,7 @@ class PlayerComponent extends Component {
         let hor = this._input.RIGHT - this._input.LEFT;
         if (hor != 0) {
             this._entity.position.x += 3 * hor;
+            this._material.scale[0] = hor;
         }
     }
 

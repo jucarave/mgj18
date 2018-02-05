@@ -11,6 +11,7 @@ let SpriteShader: ShaderStruct = {
         uniform mat4 uPosition;
         uniform mat4 uView;
         uniform vec2 uAnchor;
+        uniform vec2 uScale;
 
         varying vec2 vTextureCoords;
 
@@ -18,6 +19,7 @@ let SpriteShader: ShaderStruct = {
             vec3 position = aVertexPosition;
             position.xy -= uAnchor;
 
+            position.xy *= uScale;
             position.y *= -1.0;
 
             gl_Position = uProjection * uPosition * uView * vec4(position, 1.0);

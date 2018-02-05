@@ -72,6 +72,9 @@ class SpriteMaterial extends Material {
     private _animations         : AnimationsMap;
     private _currentAnimation   : Animation;
     private _uvs                : Array<number>;
+    
+    
+    public scale                : Array<number>;
 
     constructor(renderer: Renderer, texture: Texture) {
         super(renderer.gl, renderer.getShader("SPRITE"));
@@ -80,6 +83,8 @@ class SpriteMaterial extends Material {
         this._animations = {};
         this._uvs = [0, 0, 1, 1];
         this._currentAnimation = null;
+
+        this.scale = [1, 1];
     }
 
     public render(): void {
@@ -94,6 +99,13 @@ class SpriteMaterial extends Material {
         gl.uniform1i(this._shader.uniforms["uTexture"], 0);
 
         gl.uniform4fv(this._shader.uniforms["uUVs"], this._uvs);
+
+        gl.uniform2fv(this._shader.uniforms["uScale"], this.scale);
+        if (this.scale[0] < 0 || this.scale[1] < 0) {
+            gl.cullFace(gl.FRONT);
+        } else {
+            gl.cullFace(gl.BACK);
+        }
 
         if (this._currentAnimation) {
             gl.uniform2fv(this._shader.uniforms["uAnchor"], this._currentAnimation.anchor);
