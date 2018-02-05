@@ -4,22 +4,38 @@ import Texture from 'engine/Texture';
 
 class Animation {
     private _frames                 : Array<Array<number>>;
+    private _material               : SpriteMaterial;
+    private _width                  : number;
+    private _height                 : number;
 
     public speed                    : number;
     public anchor                   : Array<number>;
     public frameIndex               : number;
     public readonly name            : string;
 
-    constructor(name: string, speed: number) {
+    constructor(name: string, speed: number, material: SpriteMaterial) {
+        this._material = material;
+        this._frames = [];
+        this._width = 0;
+        this._height = 0;
+
         this.name = name;
         this.speed = speed;
         this.frameIndex = 0;
-        this._frames = [];
         this.anchor = [0, 0];
     }
 
     public addFrame(x: number, y: number, w: number, h: number): void {
-        let frame = [ x, y, w, h ];
+        let texture = this._material.texture,
+            frame = [ 
+            x / texture.width,
+            y / texture.height,
+            w / texture.width,
+            h / texture.height
+        ];
+
+        this._width = Math.max(this._width, w);
+        this._height = Math.max(this._height, h);
 
         this._frames.push(frame);
     }
@@ -36,6 +52,14 @@ class Animation {
         }
 
         return this.getFrame(this.frameIndex);
+    }
+
+    public get width(): number {
+        return this._width;
+    }
+
+    public get height(): number {
+        return this._height;
     }
 }
 
@@ -71,11 +95,13 @@ class SpriteMaterial extends Material {
 
         gl.uniform4fv(this._shader.uniforms["uUVs"], this._uvs);
 
-        gl.uniform2fv(this._shader.uniforms["uAnchor"], this._currentAnimation.anchor);
+        if (this._currentAnimation) {
+            gl.uniform2fv(this._shader.uniforms["uAnchor"], this._currentAnimation.anchor);
+        }
     }
 
     public createAnimation(name: string, speed: number = 1.0): Animation {
-        let animation = new Animation(name, speed);
+        let animation = new Animation(name, speed, this);
 
         this._animations[name] = animation;
 
@@ -96,6 +122,10 @@ class SpriteMaterial extends Material {
         if (!this._animations[animationName]) { throw new Error("Animation [" + animationName + "] is not defined"); }
 
         this._animations[animationName].addFrame(x, y, w, h);
+    }
+
+    public getCurrentAnimation(): Animation {
+        return this._currentAnimation;
     }
 
     public playAnimation(animationName: string): void {

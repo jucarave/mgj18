@@ -28,6 +28,8 @@
 
     "src/engine/math/Matrix4.ts",
     "src/engine/math/Vector3.ts",
-    "src/engine/math/Vector4.ts"
+    "src/engine/math/Vector4.ts",
+
+    "src/manager/SpritesManager.ts"
   ]
 }

@@ -6,7 +6,7 @@ class Texture {
     private _gl                 : WebGLRenderingContext;
     private _isReady            : boolean;
     
-    constructor(gl: WebGLRenderingContext, src: string) {
+    constructor(gl: WebGLRenderingContext, src: string, callback?: Function) {
         this._gl = gl;
 
         this._image = new Image();
@@ -19,6 +19,10 @@ class Texture {
             this._height = this._image.height;
 
             this._parseTexture();
+
+            if (callback) {
+                callback(this);
+            }
         };
     }
 

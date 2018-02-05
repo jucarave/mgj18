@@ -1,10 +1,8 @@
 import Renderer from 'engine/Renderer';
 import Matrix4 from 'engine/math/Matrix4';
-import Geometry from 'engine/geometry/Geometry';
 import Entity from 'engine/entities/Entity';
 import Camera from 'engine/Camera';
-import SpriteMaterial from 'engine/materials/SpriteMaterial';
-import Texture from 'engine/Texture';
+import SpritesManager from 'manager/SpritesManager';
 
 class App {
     private _renderer           : Renderer;
@@ -12,38 +10,26 @@ class App {
     constructor() {
         this._renderer = new Renderer(854, 480, document.getElementById("divGame"));
 
-        this._drawTriangle();
+        this._init();
     }
 
-    private _drawTriangle(): void {
-        // Create triangle
-        let geo: Geometry = new Geometry(this._renderer.gl);
-        geo.addVertice( 0.0, 32.0, 0.0);
-        geo.addVertice(16.0, 32.0, 0.0);
-        geo.addVertice(16.0,  0.0, 0.0);
-        geo.addVertice( 0.0,  0.0, 0.0);
+    private _init(): void {
+        SpritesManager.init(this._renderer);
 
-        geo.addTextureCoord(0, 1);
-        geo.addTextureCoord(1, 1);
-        geo.addTextureCoord(1, 0);
-        geo.addTextureCoord(0, 0);
+        var waitLoad = () => {
+            if (SpritesManager.isReady) {
+                this._drawScene();
+            } else {
+                requestAnimationFrame(() => { waitLoad(); });
+            }
+        };
 
-        geo.addTriangle(0, 1, 2);
-        geo.addTriangle(0, 2, 3);
+        waitLoad();
+    }
 
-        geo.build();
-
-        let texture = new Texture(this._renderer.gl, "img/fireman.png");
-
-        let mat = new SpriteMaterial(this._renderer, texture);
-        
-        mat.createAnimation("stand", 0.1);
-        mat.setAnimationAnchor("stand", 8, 32);
-        mat.addAnimationFrame("stand", 0, 0, 16/32, 32/32);
-        mat.addAnimationFrame("stand", 16/32, 0, 16/32, 32/32);
-        mat.playAnimation("stand");
-
-        let spr: Entity = new Entity(geo, mat);
+    private _drawScene(): void {
+        let mat = SpritesManager.materials.FIREMAN;
+        let spr: Entity = new Entity(SpritesManager.getGeometry(mat), mat);
 
         // Create camera
         let camera = new Camera(Matrix4.createOrtho(854/4, 480/4, 0.1, 1000));
