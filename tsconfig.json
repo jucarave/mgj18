@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "removeComments": true,
+    "target": "es5",
+    "baseUrl": "./src"
+  },
+  "files": [
+    "src/App.ts",
+    
+    "src/engine/Renderer.ts",
+    "src/engine/Camera.ts",
+    "src/engine/Texture.ts",
+
+    "src/engine/entities/Entity.ts",
+
+    "src/engine/geometry/Geometry.ts",
+
+    "src/engine/materials/Material.ts",
+    "src/engine/materials/SpriteMaterial.ts",
+
+    "src/engine/shaders/Shader.ts",
+    "src/engine/shaders/ShaderStruct.ts",
+    "src/engine/shaders/SpriteShader.ts",
+
+    "src/engine/math/Matrix4.ts",
+    "src/engine/math/Vector3.ts",
+    "src/engine/math/Vector4.ts"
+  ]
+}
