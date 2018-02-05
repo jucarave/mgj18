@@ -2,6 +2,7 @@ import Vector3 from 'engine/math/Vector3';
 import Matrix4 from 'engine/math/Matrix4';
 import Geometry from 'engine/geometry/Geometry';
 import Material from 'engine/materials/Material';
+import Component from 'engine/Component';
 
 class Entity {
     protected _geometry             : Geometry;
@@ -9,7 +10,9 @@ class Entity {
     protected _position             : Vector3;
     protected _rotation             : Vector3;
     protected _transformation       : Matrix4;
+    protected _started              : boolean;
     protected _needsUpdate          : boolean;
+    protected _components           : Array<Component>;
 
     constructor(geometry: Geometry, material: Material) {
         this._geometry = geometry;
@@ -17,21 +20,9 @@ class Entity {
         this._position = new Vector3();
         this._rotation = new Vector3();
         this._transformation = Matrix4.createIdentity();
+        this._components = [];
         this._needsUpdate = true;
-    }
-
-    public render(): void {
-        if (!this._material.isReady()) { return; }
-
-        let gl = this._geometry.gl,
-            shader = this._material.shader,
-            
-            transform = this.transformation;
-
-        gl.uniformMatrix4fv(shader.uniforms["uPosition"], false, transform.data); 
-
-        this._material.render();
-        this._geometry.render(shader);
+        this._started = false;
     }
 
     public setPosition(x: number, y: number, z:number, relative: boolean = false): void {
@@ -52,6 +43,60 @@ class Entity {
         }
 
         this._needsUpdate = true;
+    }
+
+    public addComponent(component: Component): void {
+        this._components.push(component);
+
+        component.setEntity(this);
+
+        if (this._started) {
+            component.start();
+        }
+    }
+
+    public getComponent<T>(componentName: string): T {
+        for (let i=0,comp;comp=this._components[i];i++) {
+            if (comp.name == componentName) {
+                return <T>(<any>comp);
+            }
+        }
+
+        return null;
+    }
+
+    public start(): void {
+        for (let i=0,comp;comp=this._components[i];i++) {
+            comp.start();
+        }
+
+        this._started = true;
+    }
+
+    public update(): void {
+        for (let i=0,comp;comp=this._components[i];i++) {
+            comp.update();
+        }
+    }
+
+    public destroy(): void {
+        for (let i=0,comp;comp=this._components[i];i++) {
+            comp.destroy();
+        }
+    }
+
+    public render(): void {
+        if (!this._material.isReady()) { return; }
+
+        let gl = this._geometry.gl,
+            shader = this._material.shader,
+            
+            transform = this.transformation;
+
+        gl.uniformMatrix4fv(shader.uniforms["uPosition"], false, transform.data); 
+
+        this._material.render();
+        this._geometry.render(shader);
     }
 
     public get material(): Material {

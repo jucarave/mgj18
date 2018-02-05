@@ -3,6 +3,7 @@ import Matrix4 from 'engine/math/Matrix4';
 import Entity from 'engine/entities/Entity';
 import Camera from 'engine/Camera';
 import SpritesManager from 'manager/SpritesManager';
+import PlayerComponent from 'components/PlayerComponent';
 
 class App {
     private _renderer           : Renderer;
@@ -31,6 +32,8 @@ class App {
         let mat = SpritesManager.materials.FIREMAN;
         let spr: Entity = new Entity(SpritesManager.getGeometry(mat), mat);
 
+        spr.addComponent(new PlayerComponent());
+
         // Create camera
         let camera = new Camera(Matrix4.createOrtho(854/4, 480/4, 0.1, 1000));
         camera.setPosition(0, 0, 3);
@@ -49,6 +52,7 @@ class App {
         gl.uniformMatrix4fv(shader.uniforms["uProjection"], false, camera.projection.data);
         gl.uniformMatrix4fv(shader.uniforms["uView"], false, camera.transformation.data); 
 
+        entity.update();
         entity.render();
 
         requestAnimationFrame(() => {
