@@ -15,6 +15,7 @@
     "src/engine/Camera.ts",
     "src/engine/Texture.ts",
     "src/engine/Component.ts",
+    "src/engine/Scene.ts",
 
     "src/engine/entities/Entity.ts",
 
@@ -33,6 +34,10 @@
 
     "src/manager/SpritesManager.ts",
 
-    "src/components/PlayerComponent.ts"
+    "src/components/PlayerComponent.ts",
+
+    "src/factories/EntitiesFactory.ts",
+
+    "src/scenes/TestScene.ts"
   ]
 }

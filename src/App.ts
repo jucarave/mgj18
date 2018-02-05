@@ -1,12 +1,11 @@
 import Renderer from 'engine/Renderer';
-import Matrix4 from 'engine/math/Matrix4';
-import Entity from 'engine/entities/Entity';
-import Camera from 'engine/Camera';
 import SpritesManager from 'manager/SpritesManager';
-import PlayerComponent from 'components/PlayerComponent';
+import Scene from 'engine/Scene';
+import TestScene from 'scenes/TestScene';
 
 class App {
     private _renderer           : Renderer;
+    private _scene              : Scene;
 
     constructor() {
         this._renderer = new Renderer(854, 480, document.getElementById("divGame"));
@@ -19,7 +18,7 @@ class App {
 
         var waitLoad = () => {
             if (SpritesManager.isReady) {
-                this._drawScene();
+                this._newGame();
             } else {
                 requestAnimationFrame(() => { waitLoad(); });
             }
@@ -28,35 +27,20 @@ class App {
         waitLoad();
     }
 
-    private _drawScene(): void {
-        let mat = SpritesManager.materials.FIREMAN;
-        let spr: Entity = new Entity(SpritesManager.getGeometry(mat), mat);
+    private _newGame(): void {
+        this._scene = new TestScene(this._renderer);
 
-        spr.addComponent(new PlayerComponent());
-
-        // Create camera
-        let camera = new Camera(Matrix4.createOrtho(854/4, 480/4, 0.1, 1000));
-        camera.setPosition(0, 0, 3);
-        camera.setTarget(0, 0, 0);
-
-        this._loop(spr, camera);
+        this._loop();
     }
 
-    private _loop(entity: Entity, camera: Camera): void {
-        let gl = this._renderer.gl,
-            shader = entity.material.shader;
-
-        // Draw triangle
+    private _loop(): void {
+        // Render the game
         this._renderer.clear();
 
-        gl.uniformMatrix4fv(shader.uniforms["uProjection"], false, camera.projection.data);
-        gl.uniformMatrix4fv(shader.uniforms["uView"], false, camera.transformation.data); 
-
-        entity.update();
-        entity.render();
+        this._scene.loop();
 
         requestAnimationFrame(() => {
-            this._loop(entity, camera);
+            this._loop();
         });
     }
 }
