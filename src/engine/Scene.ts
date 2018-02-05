@@ -28,6 +28,8 @@ abstract class Scene {
         if (!this._layers[layer]) { throw new Error("Layer [" + layer + "] not found!"); }
 
         this._layers[layer].push(entity);
+
+        entity.start();
     }
 
     public loop(): void {

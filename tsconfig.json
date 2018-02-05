@@ -16,6 +16,7 @@
     "src/engine/Texture.ts",
     "src/engine/Component.ts",
     "src/engine/Scene.ts",
+    "src/engine/Input.ts",
 
     "src/engine/entities/Entity.ts",
 

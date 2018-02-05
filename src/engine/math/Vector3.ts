@@ -3,7 +3,7 @@ export class Vector3 {
     private _y                  : number;
     private _z                  : number;
     private _length             : number;
-    private needsUpdate         : boolean;
+    private _needsUpdate         : boolean;
 
     public inUse                : boolean;
 
@@ -22,7 +22,7 @@ export class Vector3 {
         this._y = y;
         this._z = z;
 
-        this.needsUpdate = true;
+        this._needsUpdate = true;
 
         return this;
     }
@@ -32,7 +32,7 @@ export class Vector3 {
         this._y += y;
         this._z += z;
 
-        this.needsUpdate = true;
+        this._needsUpdate = true;
 
         return this;
     }
@@ -42,7 +42,7 @@ export class Vector3 {
         this._y *= num;
         this._z *= num;
 
-        this.needsUpdate = true;
+        this._needsUpdate = true;
 
         return this;
     }
@@ -67,17 +67,17 @@ export class Vector3 {
     public get y(): number { return this._y; }
     public get z(): number { return this._z; }
 
-    public set x(x: number) { this._x = x; this.needsUpdate = true; }
-    public set y(y: number) { this._y = y; this.needsUpdate = true; }
-    public set z(z: number) { this._z = z; this.needsUpdate = true; }
+    public set x(x: number) { this._x = x; this._needsUpdate = true; }
+    public set y(y: number) { this._y = y; this._needsUpdate = true; }
+    public set z(z: number) { this._z = z; this._needsUpdate = true; }
 
     public get length(): number {
-        if (!this.needsUpdate) {
+        if (!this._needsUpdate) {
             return this._length;
         }
 
         this._length = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
-        this.needsUpdate =  false;
+        this._needsUpdate =  false;
 
         return this._length;
     }
@@ -92,6 +92,10 @@ export class Vector3 {
 
     public static dot(vectorA: Vector3, vectorB: Vector3): number {
         return vectorA.x * vectorB.x + vectorA.y * vectorB.y + vectorA.z * vectorB.z;
+    }
+
+    public get needsUpdate(): boolean {
+        return this._needsUpdate;
     }
 }
 

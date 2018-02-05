@@ -2,6 +2,7 @@ import Renderer from 'engine/Renderer';
 import SpritesManager from 'manager/SpritesManager';
 import Scene from 'engine/Scene';
 import TestScene from 'scenes/TestScene';
+import Input from 'engine/Input';
 
 class App {
     private _renderer           : Renderer;
@@ -14,6 +15,7 @@ class App {
     }
 
     private _init(): void {
+        Input.init();
         SpritesManager.init(this._renderer);
 
         var waitLoad = () => {

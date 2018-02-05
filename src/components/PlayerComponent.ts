@@ -1,14 +1,52 @@
 import Component from 'engine/Component';
+import Input from 'engine/Input';
+
+type keys = 'RIGHT' | 'LEFT';
 
 class PlayerComponent extends Component {
     public static readonly ComponentName           : string = "PlayerComponent";
+
+    private _input = {
+        LEFT: 0,
+        RIGHT: 0
+    };
 
     constructor() {
         super(PlayerComponent.ComponentName);
     }
 
+    private _handleKeyboard(keyCode: number, value: number): void {
+        let key: keys = null;
+        if (keyCode == 68) { key = 'RIGHT'; } else 
+        if (keyCode == 65) { key = 'LEFT'; }
+
+        if (key != null) {
+            if (this._input[key] == 2 && value == 1) {
+                return;
+            }
+
+            this._input[key] = value;
+        }
+    }
+
+    private _updateMovement(): void {
+        let hor = this._input.RIGHT - this._input.LEFT;
+        if (hor != 0) {
+            this._entity.position.x += 3 * hor;
+        }
+    }
+
+    public start(): void {
+        Input.addListener("keydown", (ev: KeyboardEvent) => { this._handleKeyboard(ev.keyCode, 1); });
+        Input.addListener("keyup", (ev: KeyboardEvent) => { this._handleKeyboard(ev.keyCode, 0); });
+    }
+
     public update(): void {
-        this._entity.setRotation(0, 0, 3 * Math.PI / 180, true);
+        this._updateMovement();
+    }
+
+    public destroy(): void {
+
     }
 }
 

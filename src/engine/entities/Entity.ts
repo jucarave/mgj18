@@ -112,7 +112,7 @@ class Entity {
     }
 
     public get transformation(): Matrix4 {
-        if (!this._needsUpdate) {
+        if (!this.needsUpdate) {
             return this._transformation;
         }
 
@@ -126,6 +126,10 @@ class Entity {
         this._needsUpdate = false;
 
         return this._transformation;
+    }
+
+    public get needsUpdate(): boolean {
+        return this._needsUpdate || this._position.needsUpdate || this._rotation.needsUpdate;
     }
 }
 
