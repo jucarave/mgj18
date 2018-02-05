@@ -32,6 +32,8 @@ class App {
     private _newGame(): void {
         this._scene = new TestScene(this._renderer);
 
+        this._scene.start();
+
         this._loop();
     }
 

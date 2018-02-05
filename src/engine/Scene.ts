@@ -28,8 +28,16 @@ abstract class Scene {
         if (!this._layers[layer]) { throw new Error("Layer [" + layer + "] not found!"); }
 
         this._layers[layer].push(entity);
+    }
 
-        entity.start();
+    public start(): void {
+        for (let name in this._layers) {
+            let layer = this._layers[name];
+
+            for (let i=0,entity;entity=layer[i];i++) {
+                entity.start();
+            }
+        }
     }
 
     public loop(): void {
