@@ -142,6 +142,7 @@ class SpriteMaterial extends Material {
 
     public playAnimation(animationName: string): void {
         if (!this._animations[animationName]) { throw new Error("Animation [" + animationName + "] is not defined"); }
+        if (this._currentAnimation == this._animations[animationName]) { return; }
 
         this._currentAnimation = this._animations[animationName];
 

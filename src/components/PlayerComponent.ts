@@ -6,6 +6,7 @@ type keys = 'RIGHT' | 'LEFT';
 
 class PlayerComponent extends Component {
     private _material           : SpriteMaterial;
+    private _speed              : number;
 
 
     public static readonly ComponentName           : string = "PlayerComponent";
@@ -18,7 +19,7 @@ class PlayerComponent extends Component {
     constructor() {
         super(PlayerComponent.ComponentName);
 
-        this._material = <SpriteMaterial>this._entity.material;
+        this._speed = 1.5;
     }
 
     private _handleKeyboard(keyCode: number, value: number): void {
@@ -38,12 +39,18 @@ class PlayerComponent extends Component {
     private _updateMovement(): void {
         let hor = this._input.RIGHT - this._input.LEFT;
         if (hor != 0) {
-            this._entity.position.x += 3 * hor;
+            this._entity.position.x += this._speed * hor;
             this._material.scale[0] = hor;
+
+            this._material.playAnimation("walk");
+        } else {
+            this._material.playAnimation("stand");
         }
     }
 
     public start(): void {
+        this._material = <SpriteMaterial>this._entity.material;
+
         Input.addListener("keydown", (ev: KeyboardEvent) => { this._handleKeyboard(ev.keyCode, 1); });
         Input.addListener("keyup", (ev: KeyboardEvent) => { this._handleKeyboard(ev.keyCode, 0); });
     }

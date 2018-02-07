@@ -27,8 +27,15 @@ export default {
         let mat = new SpriteMaterial(this.renderer, this.texture);
         
         mat.createAnimation("stand", 0);
-        mat.setAnimationAnchor("stand", 8, 32);
-        mat.addAnimationFrame("stand", 0, 0, 16, 32);
+        mat.setAnimationAnchor("stand", 16, 32);
+        mat.addAnimationFrame("stand", 0, 0, 32, 32);
+
+        mat.createAnimation("walk", 1 / 6);
+        mat.setAnimationAnchor("walk", 16, 32);
+        
+        for (let i=0;i<6;i++) {
+            mat.addAnimationFrame("walk", 32+32*i, 0, 32, 32);
+        }
 
         this.materials.FIREMAN = mat;
     },
