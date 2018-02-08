@@ -50,5 +50,6 @@ class App {
 }
 
 window.onload = () => {
+    document.body.removeChild(document.getElementsByTagName("p")[0]);
     new App();
 };

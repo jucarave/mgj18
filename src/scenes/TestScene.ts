@@ -1,5 +1,6 @@
 import Scene from 'engine/Scene';
 import EntitiesFactory from 'factories/EntitiesFactory';
+import Text from 'engine/entities/Text';
 import Camera from 'engine/Camera';
 import Matrix4 from 'engine/math/Matrix4';
 import Renderer from 'engine/Renderer';
@@ -21,6 +22,10 @@ class TestScene extends Scene {
 
     private _initEntities(): void {
         this.addInstance(EntitiesFactory.createPlayer(0.0, 0.0), "Entities");
+
+        let text = new Text(this._renderer, "Hola mundo", "manaspace", 18);
+        text.setPosition(-50, 24, 0);
+        this.addInstance(text, "Entities");
     }
 }
 
