@@ -73,7 +73,7 @@ class SpriteMaterial extends Material {
     private _currentAnimation   : Animation;
     private _uvs                : Array<number>;
     
-    
+    public anchor               : Array<number>;
     public scale                : Array<number>;
 
     constructor(renderer: Renderer, texture: Texture) {
@@ -85,6 +85,7 @@ class SpriteMaterial extends Material {
         this._currentAnimation = null;
 
         this.scale = [1, 1];
+        this.anchor = [0, 0];
     }
 
     public render(): void {
@@ -107,9 +108,7 @@ class SpriteMaterial extends Material {
             gl.cullFace(gl.BACK);
         }
 
-        if (this._currentAnimation) {
-            gl.uniform2fv(this._shader.uniforms["uAnchor"], this._currentAnimation.anchor);
-        }
+        gl.uniform2fv(this._shader.uniforms["uAnchor"], (this._currentAnimation)? this._currentAnimation.anchor : this.anchor);
     }
 
     public createAnimation(name: string, speed: number = 1.0): Animation {

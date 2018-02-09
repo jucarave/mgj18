@@ -40,6 +40,9 @@ let SpriteShader: ShaderStruct = {
             vec2 coords = vTextureCoords * uUVs.zw + uUVs.xy;
 
             gl_FragColor = texture2D(uTexture, coords);
+            if (gl_FragColor.a > 0.0) {
+                gl_FragColor.a = 1.0;
+            }
         }
     `
 };

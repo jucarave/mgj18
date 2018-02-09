@@ -23,8 +23,8 @@ class TestScene extends Scene {
     private _initEntities(): void {
         this.addInstance(EntitiesFactory.createPlayer(0.0, 0.0), "Entities");
 
-        let text = new Text(this._renderer, "Hola mundo", "manaspace", 18);
-        text.setPosition(-50, 24, 0);
+        let text = new Text(this._renderer, "Hola mundo", {font: 'manaspace', color: '#FFFFFF', halign: 'center'});
+        text.setPosition(0, 0, 1);
         this.addInstance(text, "Entities");
     }
 }
