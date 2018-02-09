@@ -73,6 +73,10 @@ class Geometry {
     public get gl(): WebGLRenderingContext {
         return this._gl;
     }
+
+    public get trianglesLength(): number {
+        return this._triangles.length / 3;
+    }
 }
 
 export default Geometry;

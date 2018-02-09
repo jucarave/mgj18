@@ -38,7 +38,7 @@ class Renderer {
         let gl = this._canvas.getContext("webgl");
 
         gl.enable(gl.CULL_FACE);
-        gl.enable(gl.DEPTH_TEST);
+        gl.disable(gl.DEPTH_TEST);
         gl.enable(gl.BLEND);
 
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);

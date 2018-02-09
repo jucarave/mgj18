@@ -115,11 +115,7 @@ class SpriteMaterial extends Material {
         let animation = new Animation(name, speed, this);
 
         this._animations[name] = animation;
-
-        if (this._currentAnimation == null) {
-            this._currentAnimation = animation;
-        }
-
+        
         return animation;
     }
 
@@ -137,6 +133,12 @@ class SpriteMaterial extends Material {
 
     public getCurrentAnimation(): Animation {
         return this._currentAnimation;
+    }
+
+    public getAnimationUVS(animationName: string, frameIndex: number): Array<number> {
+        if (!this._animations[animationName]) { throw new Error("Animation [" + animationName + "] is not defined"); }
+
+        return this._animations[animationName].getFrame(frameIndex);
     }
 
     public playAnimation(animationName: string): void {

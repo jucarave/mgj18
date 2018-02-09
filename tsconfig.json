@@ -36,10 +36,12 @@
     "src/engine/math/Vector4.ts",
 
     "src/manager/SpritesManager.ts",
+    "src/manager/RoomsManager.ts",
 
     "src/components/PlayerComponent.ts",
 
     "src/factories/EntitiesFactory.ts",
+    "src/factories/TilesFactory.ts",
 
     "src/scenes/TestScene.ts"
   ]

@@ -5,26 +5,34 @@ import Renderer from 'engine/Renderer';
 import Geometry from 'engine/geometry/Geometry';
 
 export default {
-    isReady: false,
-    texture: null,
+    _textCount: false,
     renderer: null,
     materials: {
-        FIREMAN: null
+        FIREMAN: null,
+        HOUSE: null
     },
     geometries: {},
+    images: [
+        "img/fireman.png",
+        "img/houseTiles.png"
+    ],
 
     init(renderer: Renderer): void {
         this.renderer = renderer;
 
-        this.texture = new Texture(this.renderer.gl, "img/fireman.png", () => {
-            this._initFireman();
+        let fireManTexture = new Texture(this.renderer.gl, this.images[0], () => {
+            this._initFireman(fireManTexture);
+            this._textCount += 1;
+        });
 
-            this.isReady = true;
+        let houseTexture = new Texture(this.renderer.gl, this.images[1], () => {
+            this._initHouse(houseTexture);
+            this._textCount += 1;
         });
     },
 
-    _initFireman(): void {
-        let mat = new SpriteMaterial(this.renderer, this.texture);
+    _initFireman(texture: Texture): void {
+        let mat = new SpriteMaterial(this.renderer, texture);
         
         mat.createAnimation("stand", 0);
         mat.setAnimationAnchor("stand", 16, 32);
@@ -37,7 +45,19 @@ export default {
             mat.addAnimationFrame("walk", 32+32*i, 0, 32, 32);
         }
 
+        mat.playAnimation("stand");
+
         this.materials.FIREMAN = mat;
+    },
+
+    _initHouse(texture: Texture): void {
+        let mat = new SpriteMaterial(this.renderer, texture);
+
+        mat.createAnimation("floor", 0).addFrame(0, 0, 16, 16);
+        mat.createAnimation("floorWall", 0).addFrame(16, 48, 16, 64);
+        mat.createAnimation("wall", 0).addFrame(16, 32, 16, 48);
+
+        this.materials.HOUSE = mat;
     },
 
     getGeometry(material: Material): Geometry {
@@ -80,5 +100,9 @@ export default {
         this.geometries[key] = geo;
 
         return geo;
+    },
+
+    get isReady(): boolean {
+        return this._textCount == this.images.length;
     }
 };

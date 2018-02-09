@@ -50,7 +50,7 @@ abstract class Scene {
             for (let i=0,entity;entity=layer[i];i++) {
                 entity.update();
             }
-            
+
             for (let i=0,entity;entity=layer[i];i++) {
                 let shader = entity.material.shader
                 if (shader !== lastShader) {
