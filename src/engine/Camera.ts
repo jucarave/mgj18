@@ -35,7 +35,7 @@ class Camera {
     }
 
     public get transformation(): Matrix4 {
-        if (!this._needsUpdate) {
+        if (!this.needsUpdate) {
             return this._transformation;
         }
 
@@ -78,6 +78,10 @@ class Camera {
 
     public get target(): Vector3 {
         return this._target;
+    }
+
+    public get needsUpdate(): boolean {
+        return this._needsUpdate || this._position.needsUpdate || this._target.needsUpdate;
     }
 }
 

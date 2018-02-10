@@ -3,6 +3,7 @@ import Matrix4 from 'engine/math/Matrix4';
 import Geometry from 'engine/geometry/Geometry';
 import Material from 'engine/materials/Material';
 import Component from 'engine/Component';
+import Scene from '../Scene';
 
 class Entity {
     protected _geometry             : Geometry;
@@ -13,6 +14,8 @@ class Entity {
     protected _started              : boolean;
     protected _needsUpdate          : boolean;
     protected _components           : Array<Component>;
+    
+    public scene                    : Scene;
 
     constructor(geometry: Geometry, material: Material) {
         this._geometry = geometry;
@@ -86,7 +89,7 @@ class Entity {
     }
 
     public render(): void {
-        if (!this._material.isReady()) { return; }
+        if (!this._material.isReady) { return; }
 
         let gl = this._geometry.gl,
             shader = this._material.shader,

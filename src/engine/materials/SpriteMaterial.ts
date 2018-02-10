@@ -77,7 +77,7 @@ class SpriteMaterial extends Material {
     public scale                : Array<number>;
 
     constructor(renderer: Renderer, texture: Texture) {
-        super(renderer.gl, renderer.getShader("SPRITE"));
+        super(renderer, renderer.getShader("SPRITE"));
 
         this._texture = texture;
         this._animations = {};
@@ -109,6 +109,10 @@ class SpriteMaterial extends Material {
         }
 
         gl.uniform2fv(this._shader.uniforms["uAnchor"], (this._currentAnimation)? this._currentAnimation.anchor : this.anchor);
+    }
+
+    public setAnimations(animationMap: AnimationsMap): void {
+        this._animations = animationMap;
     }
 
     public createAnimation(name: string, speed: number = 1.0): Animation {
@@ -151,7 +155,15 @@ class SpriteMaterial extends Material {
         this._uvs = this._currentAnimation.getFrame(0);
     }
 
-    public isReady(): boolean {
+    public clone(): SpriteMaterial {
+        let ret = new SpriteMaterial(this._renderer, this._texture);
+
+        ret.setAnimations(this._animations);
+
+        return ret;
+    }
+
+    public get isReady(): boolean {
         return this._texture.isReady;
     }
 

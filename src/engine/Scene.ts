@@ -28,6 +28,8 @@ abstract class Scene {
         if (!this._layers[layer]) { throw new Error("Layer [" + layer + "] not found!"); }
 
         this._layers[layer].push(entity);
+
+        entity.scene = this;
     }
 
     public start(): void {
@@ -63,6 +65,10 @@ abstract class Scene {
                 entity.render();
             }
         }
+    }
+
+    public get camera(): Camera {
+        return this._camera;
     }
 }
 

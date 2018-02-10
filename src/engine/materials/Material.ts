@@ -1,17 +1,22 @@
 import Shader from 'engine/shaders/Shader';
+import Renderer from '../Renderer';
 
 abstract class Material {
     protected _shader           : Shader;
     protected _gl               : WebGLRenderingContext;
+    protected _renderer         : Renderer;
 
-    constructor(gl: WebGLRenderingContext, shader: Shader) {
-        this._gl = gl;
+    constructor(renderer: Renderer, shader: Shader) {
+        this._renderer = renderer;
+        this._gl = renderer.gl;
         this._shader = shader;
     }
 
     public abstract render(): void;
 
-    public isReady(): boolean {
+    public abstract clone(): Material;
+
+    public get isReady(): boolean {
         return true;
     }
 

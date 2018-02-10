@@ -1,12 +1,14 @@
 import Component from 'engine/Component';
 import Input from 'engine/Input';
 import SpriteMaterial from 'engine/materials/SpriteMaterial';
+import Camera from 'engine/Camera';
 
 type keys = 'RIGHT' | 'LEFT';
 
 class PlayerComponent extends Component {
     private _material           : SpriteMaterial;
     private _speed              : number;
+    private _camera             : Camera;
 
 
     public static readonly ComponentName           : string = "PlayerComponent";
@@ -48,8 +50,15 @@ class PlayerComponent extends Component {
         }
     }
 
+    private _followCamera(): void {
+        let pos = this._entity.position;
+        this._camera.position.x = pos.x;
+        this._camera.target.x = pos.x;
+    }
+
     public start(): void {
         this._material = <SpriteMaterial>this._entity.material;
+        this._camera = this._entity.scene.camera;
 
         Input.addListener("keydown", (ev: KeyboardEvent) => { this._handleKeyboard(ev.keyCode, 1); });
         Input.addListener("keyup", (ev: KeyboardEvent) => { this._handleKeyboard(ev.keyCode, 0); });
@@ -57,6 +66,7 @@ class PlayerComponent extends Component {
 
     public update(): void {
         this._updateMovement();
+        this._followCamera();
     }
 
     public destroy(): void {

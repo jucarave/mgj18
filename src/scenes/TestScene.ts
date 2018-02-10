@@ -10,8 +10,11 @@ class TestScene extends Scene {
     constructor(renderer: Renderer) {
         super(renderer);
 
+        renderer.gl.clearColor(0.4823, 0.6274, 0.8313, 1.0);
+
         this._camera = new Camera(Matrix4.createOrtho(854/4, 480/4, 0.1, 1000.0));
-        this._camera.setPosition(0.0, 0.0, 20.0);
+        this._camera.setPosition(0.0, 64.0, 20.0);
+        this._camera.setTarget(0.0, 64.0, 0.0);
 
         this._initLayers();
         this._initEntities();
@@ -26,7 +29,11 @@ class TestScene extends Scene {
     private _initEntities(): void {
         this.addInstance(TilesFactory.createTestRoom(this._renderer.gl), "Tiles");
 
-        this.addInstance(EntitiesFactory.createPlayer(0.0, 0.0), "Entities");
+        this.addInstance(EntitiesFactory.createSearchable("couch", 8.0, 42.0), "Entities");
+        this.addInstance(EntitiesFactory.createSearchable("tv", 104.0, 42.0), "Entities");
+        this.addInstance(EntitiesFactory.createSearchable("table", 150.0, 42.0), "Entities");
+
+        this.addInstance(EntitiesFactory.createPlayer(120.0, 6.0), "Entities");
 
         let text = new Text(this._renderer, "Hola mundo", {font: 'manaspace', color: '#FFFFFF', halign: 'center'});
         text.setPosition(0, 16, 0);

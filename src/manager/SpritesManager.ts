@@ -8,8 +8,8 @@ export default {
     _textCount: false,
     renderer: null,
     materials: {
-        FIREMAN: null,
-        HOUSE: null
+        FIREMAN: <Material>null,
+        HOUSE: <Material>null
     },
     geometries: {},
     images: [
@@ -53,9 +53,24 @@ export default {
     _initHouse(texture: Texture): void {
         let mat = new SpriteMaterial(this.renderer, texture);
 
+        // LIVING ROOM
         mat.createAnimation("floor", 0).addFrame(0, 0, 16, 16);
-        mat.createAnimation("floorWall", 0).addFrame(16, 48, 16, 64);
-        mat.createAnimation("wall", 0).addFrame(16, 32, 16, 48);
+        mat.createAnimation("floorWall", 0).addFrame(16, 48, 16, 16);
+        mat.createAnimation("wall", 0).addFrame(16, 32, 16, 16);
+        mat.createAnimation("wallCeil", 0).addFrame(16, 16, 16, 16);
+        mat.createAnimation("ceil", 0).addFrame(16, 0, 16, 16);
+        
+        mat.createAnimation("windowTop", 0).addFrame(0, 16, 16, 16);
+        mat.createAnimation("windowBottom", 0).addFrame(0, 32, 16, 16);
+
+        mat.createAnimation("paint1", 0).addFrame(32, 0, 16, 16);
+
+        mat.createAnimation("paint2Top", 0).addFrame(32, 16, 16, 16);
+        mat.createAnimation("paint2Bottom", 0).addFrame(32, 32, 16, 16);
+
+        mat.createAnimation("couch", 0).addFrame(0, 64, 64, 32);
+        mat.createAnimation("table", 0).addFrame(48, 32, 48, 32);
+        mat.createAnimation("tv", 0).addFrame(48, 0, 32, 32);
 
         this.materials.HOUSE = mat;
     },

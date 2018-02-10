@@ -7,6 +7,8 @@ import SpriteMaterial from "engine/materials/SpriteMaterial";
 const TILE_WIDTH = 16;
 const TILE_HEIGHT = 16;
 
+const LIVING_ROOM_TILES = [null, 'floor', 'floorWall', 'wall', 'wallCeil', 'ceil', 'windowTop', 'windowBottom', 'paint1', 'paint2Top', 'paint2Bottom'];
+
 function addGeometry(geo: Geometry, x: number, y: number, uvs: Array<number>): void {
     let x1 = x * TILE_WIDTH,
         y1 = y * TILE_HEIGHT,
@@ -19,10 +21,15 @@ function addGeometry(geo: Geometry, x: number, y: number, uvs: Array<number>): v
     geo.addVertice(x1, y1, 0.0);
     geo.addVertice(x2, y1, 0.0);
 
-    geo.addTextureCoord(uvs[0], uvs[3]);
-    geo.addTextureCoord(uvs[2], uvs[3]);
-    geo.addTextureCoord(uvs[0], uvs[1]);
-    geo.addTextureCoord(uvs[2], uvs[1]);
+    x1 = uvs[0];
+    y1 = uvs[1];
+    x2 = x1 + uvs[2];
+    y2 = y1 + uvs[3];
+
+    geo.addTextureCoord(x1, y2);
+    geo.addTextureCoord(x2, y2);
+    geo.addTextureCoord(x1, y1);
+    geo.addTextureCoord(x2, y1);
 
     geo.addTriangle(ind, ind + 1, ind + 2);
     geo.addTriangle(ind + 1, ind + 3, ind + 2);
@@ -42,17 +49,7 @@ export default {
                 let tile = room[y][x];
                 if (tile == 0) { continue; }
 
-                let tileName = "floor";
-                switch (tile) {
-                    case 2:
-                        tileName = "floorWall";
-                        break;
-
-                    case 3:
-                        tileName = "wall";
-                        break;
-                }
-
+                let tileName = LIVING_ROOM_TILES[tile];
                 addGeometry(geo, x, y-h, mat.getAnimationUVS(tileName, 0));
             }
         }
