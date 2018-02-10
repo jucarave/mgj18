@@ -51,9 +51,14 @@ class PlayerComponent extends Component {
     }
 
     private _followCamera(): void {
-        let pos = this._entity.position;
-        this._camera.position.x = pos.x;
-        this._camera.target.x = pos.x;
+        let pos = this._entity.position.x,
+            cameraSize = 854 / 8;
+
+        if (pos < cameraSize) { pos = cameraSize; }
+        if (pos >= this._entity.scene.size.x - cameraSize) { pos = this._entity.scene.size.x - cameraSize; }
+
+        this._camera.position.x = pos;
+        this._camera.target.x = pos;
     }
 
     public start(): void {

@@ -18,6 +18,8 @@ abstract class Component {
 
     public update(): void {}
 
+    public postUpdate(): void {}
+
     public destroy(): void {}
 }
 

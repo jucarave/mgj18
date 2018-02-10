@@ -2,6 +2,7 @@ import Entity from 'engine/entities/Entity';
 import Camera from 'engine/Camera';
 import Renderer from 'engine/Renderer';
 import Shader from 'engine/shaders/Shader';
+import { Vector3 } from './math/Vector3';
 
 interface Layers {
     [index: string]         : Array<Entity>;
@@ -11,11 +12,13 @@ abstract class Scene {
     protected _layers       : Layers;
     protected _camera       : Camera;
     protected _renderer     : Renderer;
+    protected _size         : Vector3;
 
     constructor(renderer: Renderer) {
         this._renderer = renderer;
 
         this._layers = {};
+        this._size = new Vector3();
     }
 
     protected _addLayer(name: string): void {
@@ -52,7 +55,18 @@ abstract class Scene {
             for (let i=0,entity;entity=layer[i];i++) {
                 entity.update();
             }
+        }
 
+        for (let name in this._layers) {
+            let layer = this._layers[name];
+
+            for (let i=0,entity;entity=layer[i];i++) {
+                entity.postUpdate();
+            }
+        }
+
+        for (let name in this._layers) {
+            let layer = this._layers[name];
             for (let i=0,entity;entity=layer[i];i++) {
                 let shader = entity.material.shader
                 if (shader !== lastShader) {
@@ -69,6 +83,10 @@ abstract class Scene {
 
     public get camera(): Camera {
         return this._camera;
+    }
+
+    public get size(): Vector3 {
+        return this._size;
     }
 }
 

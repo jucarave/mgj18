@@ -82,6 +82,12 @@ class Entity {
         }
     }
 
+    public postUpdate(): void {
+        for (let i=0,comp;comp=this._components[i];i++) {
+            comp.postUpdate();
+        }
+    }
+
     public destroy(): void {
         for (let i=0,comp;comp=this._components[i];i++) {
             comp.destroy();

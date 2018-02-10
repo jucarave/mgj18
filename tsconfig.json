@@ -39,6 +39,7 @@
     "src/manager/RoomsManager.ts",
 
     "src/components/PlayerComponent.ts",
+    "src/components/TimerComponent.ts",
 
     "src/factories/EntitiesFactory.ts",
     "src/factories/TilesFactory.ts",

@@ -5,6 +5,10 @@ import Camera from 'engine/Camera';
 import Matrix4 from 'engine/math/Matrix4';
 import Renderer from 'engine/Renderer';
 import TilesFactory from 'factories/TilesFactory';
+import TimerComponent from 'components/TimerComponent';
+import RoomsManager from 'manager/RoomsManager';
+
+const TILE_SIZE = 16;
 
 class TestScene extends Scene {
     constructor(renderer: Renderer) {
@@ -18,6 +22,20 @@ class TestScene extends Scene {
 
         this._initLayers();
         this._initEntities();
+        this._calculateSize();
+    }
+
+    private _calculateSize(): void {
+        let width = 0,
+            rooms = [
+                RoomsManager.livingRoom
+            ];
+
+        for (let i=0,room;room=rooms[i];i++) {
+            width += room[0].length * TILE_SIZE;
+        }
+
+        this._size.x = width;
     }
 
     private _initLayers(): void {
@@ -31,11 +49,12 @@ class TestScene extends Scene {
 
         this.addInstance(EntitiesFactory.createSearchable("couch", 8.0, 42.0), "Entities");
         this.addInstance(EntitiesFactory.createSearchable("tv", 104.0, 42.0), "Entities");
-        this.addInstance(EntitiesFactory.createSearchable("table", 150.0, 42.0), "Entities");
+        this.addInstance(EntitiesFactory.createSearchable("table", 166.0, 42.0), "Entities");
 
         this.addInstance(EntitiesFactory.createPlayer(120.0, 6.0), "Entities");
 
-        let text = new Text(this._renderer, "Hola mundo", {font: 'manaspace', color: '#FFFFFF', halign: 'center'});
+        let text = new Text(this._renderer, "TIME: 01:45", {font: 'manaspace', color: '#FFFFFF', size: 80, halign: 'right'});
+        text.addComponent(new TimerComponent());
         text.setPosition(0, 16, 0);
         this.addInstance(text, "UI");
     }
