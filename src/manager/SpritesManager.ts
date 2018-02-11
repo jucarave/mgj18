@@ -9,12 +9,14 @@ export default {
     renderer: null,
     materials: {
         FIREMAN: <Material>null,
-        HOUSE: <Material>null
+        HOUSE: <Material>null,
+        UI: <Material>null
     },
     geometries: {},
     images: [
         "img/fireman.png",
-        "img/houseTiles.png"
+        "img/houseTiles.png",
+        "img/ui.png"
     ],
 
     init(renderer: Renderer): void {
@@ -27,6 +29,11 @@ export default {
 
         let houseTexture = new Texture(this.renderer.gl, this.images[1], () => {
             this._initHouse(houseTexture);
+            this._textCount += 1;
+        });
+
+        let uiTexture = new Texture(this.renderer.gl, this.images[2], () => {
+            this._initUI(uiTexture);
             this._textCount += 1;
         });
     },
@@ -73,6 +80,17 @@ export default {
         mat.createAnimation("tv", 0).addFrame(48, 0, 32, 32);
 
         this.materials.HOUSE = mat;
+    },
+
+    _initUI(texture: Texture): void {
+        let mat = new SpriteMaterial(this.renderer, texture);
+
+        mat.createAnimation("actionButton", 0).addFrame(0, 0, 12, 12).anchor = [6, 6];
+        mat.createAnimation("backgroundPanel", 0).addFrame(16, 0, 96, 64).anchor = [48, 32];
+
+        mat.createAnimation("tv", 0).addFrame(0, 64, 80, 48).addFrame(80, 64, 80, 48).anchor = [40, 24];
+
+        this.materials.UI = mat;
     },
 
     getGeometry(material: Material): Geometry {

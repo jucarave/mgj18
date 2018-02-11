@@ -35,6 +35,23 @@ abstract class Scene {
         entity.scene = this;
     }
 
+    public checkCollisionAtLayer(entity: Entity, name: string): Entity {
+        if (!this._layers[name]) { throw new Error("Layer [" + name + "] not found!"); }
+
+        let layer = this._layers[name];
+        for (let i=0,ent;ent=layer[i];i++) {
+            if (ent == entity) {
+                continue;
+            }
+
+            if (ent.body.collidesWith(entity.body)) {
+                return ent;
+            }
+        }
+
+        return null;
+    }
+
     public start(): void {
         for (let name in this._layers) {
             let layer = this._layers[name];

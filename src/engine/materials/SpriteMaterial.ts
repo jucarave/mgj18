@@ -25,7 +25,7 @@ class Animation {
         this.anchor = [0, 0];
     }
 
-    public addFrame(x: number, y: number, w: number, h: number): void {
+    public addFrame(x: number, y: number, w: number, h: number): Animation {
         let texture = this._material.texture,
             frame = [ 
             x / texture.width,
@@ -38,6 +38,8 @@ class Animation {
         this._height = Math.max(this._height, h);
 
         this._frames.push(frame);
+
+        return this;
     }
 
     public getFrame(index: number): Array<number> {

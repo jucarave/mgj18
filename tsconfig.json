@@ -18,6 +18,7 @@
     "src/engine/Scene.ts",
     "src/engine/Input.ts",
     "src/engine/Utils.ts",
+    "src/engine/Body.ts",
 
     "src/engine/entities/Entity.ts",
     "src/engine/entities/Text.ts",
@@ -40,6 +41,7 @@
 
     "src/components/PlayerComponent.ts",
     "src/components/TimerComponent.ts",
+    "src/components/ExaminableComponent.ts",
 
     "src/factories/EntitiesFactory.ts",
     "src/factories/TilesFactory.ts",

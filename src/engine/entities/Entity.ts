@@ -3,7 +3,8 @@ import Matrix4 from 'engine/math/Matrix4';
 import Geometry from 'engine/geometry/Geometry';
 import Material from 'engine/materials/Material';
 import Component from 'engine/Component';
-import Scene from '../Scene';
+import Body from 'engine/Body';
+import Scene from 'engine/Scene';
 
 class Entity {
     protected _geometry             : Geometry;
@@ -14,6 +15,9 @@ class Entity {
     protected _started              : boolean;
     protected _needsUpdate          : boolean;
     protected _components           : Array<Component>;
+    protected _body                 : Body;
+    protected _children             : Array<Entity>;
+    protected _parent               : Entity;
     
     public scene                    : Scene;
 
@@ -26,6 +30,7 @@ class Entity {
         this._components = [];
         this._needsUpdate = true;
         this._started = false;
+        this._children = [];
     }
 
     public setPosition(x: number, y: number, z:number, relative: boolean = false): void {
@@ -48,6 +53,14 @@ class Entity {
         this._needsUpdate = true;
     }
 
+    public setBody(width: number, height: number, anchorX?: number, anchorY?: number): void {
+        this._body = new Body(this, width, height);
+
+        if (anchorX !== undefined) {
+            this._body.anchor = [anchorX, anchorY];
+        }
+    }
+
     public addComponent(component: Component): void {
         this._components.push(component);
 
@@ -66,6 +79,15 @@ class Entity {
         }
 
         return null;
+    }
+
+    public addChild(child: Entity): void {
+        this._children.push(child);
+        child.parent = this;
+    }
+
+    public getChild(index: number): Entity {
+        return this._children[index];
     }
 
     public start(): void {
@@ -132,6 +154,10 @@ class Entity {
         this._transformation.multiply(Matrix4.createYRotation(this._rotation.y));
         this._transformation.multiply(Matrix4.createZRotation(this._rotation.z));
 
+        if (this._parent) {
+            this._transformation.multiply(this._parent.transformation);
+        }
+
         this._needsUpdate = false;
 
         return this._transformation;
@@ -139,6 +165,14 @@ class Entity {
 
     public get needsUpdate(): boolean {
         return this._needsUpdate || this._position.needsUpdate || this._rotation.needsUpdate;
+    }
+
+    public get body(): Body {
+        return this._body;
+    }
+
+    public set parent(parent: Entity) {
+        this._parent = parent;
     }
 }
 
